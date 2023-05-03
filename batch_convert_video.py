@@ -23,6 +23,10 @@ def promtUser():
                         '*':'',
                         '_ultrafast_1200K_H265_aac':'-c:v libx265 -b 1200K -preset ultrafast -c:a aac', 
                         '_1280x720_1200K_H265_aac':'-s 1280x720 -c:v libx265 -b 1200K -c:a aac',
+                        '_1920x1080_1200K_H265_aac':'-s 1920x1080 -c:v libx265 -b 1200K -c:a aac',
+                        '_1920x1080_2880K_H265_aac':'-s 1920x1080 -c:v libx265 -b 2880K -c:a aac',
+                        '_1920x1080_6000K_H265_aac':'-s 1920x1080 -c:v libx265 -b 6000K -c:a aac',
+                        '_1080x1920_6000K_H265_aac':'-s 1080x1920 -c:v libx265 -b 6000K -c:a aac',
                         '_deinterlace_1200K_H265_aac':'-vf yadif -c:v libx265 -b 1200K -c:a aac',
                         }
 
