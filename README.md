@@ -8,7 +8,10 @@ or
 
 2) You can also add custom context menu on right click for with Default Program Editor http://defaultprogramseditor.com/
 
-# Require 
+# Require
+
+python
+
 ffprogress https://github.com/Hegy/ffprogress
 
 FFMpeg https://ffmpeg.org/
