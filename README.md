@@ -13,7 +13,7 @@ or
 # Require
 
 python
-https://www.python.org/downloads/windows/
+https://www.python.org/downloads/
 
 ffprogress 
 https://github.com/Hegy/ffprogress/releases
