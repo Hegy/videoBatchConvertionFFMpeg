@@ -26,7 +26,10 @@ direct link for win build https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z
 1) download and install python if not exists
 2) download and extract ffmpeg into C:\ffmpeg
 3) download and extraxt FFProgress into C:\ffmpeg\FFProgress
+
+
 add variables to path ???
   C:\ffmpeg\bin
+
 
 4) place link to the file C:\ffmpeg\FFProgress\batch_convert_video.py into sendto folder (win+R -> shell:sendto)
