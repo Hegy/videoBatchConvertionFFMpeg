@@ -1,48 +1,57 @@
-#handler.py
+# handler.py
 import os
-import ctypes
+# import ctypes
 import sys
 import subprocess
-import pkg_resources
-
-required = {'inquirer', 'tqdm'}
-installed = {pkg.key for pkg in pkg_resources.working_set}
-missing = required - installed
-
-if missing:
-    python = sys.executable
-    subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
+# import pkg_resources
+#
+# required = {'inquirer', 'tqdm'}
+# installed = {pkg.key for pkg in pkg_resources.working_set}
+# missing = required - installed
+#
+# if missing:
+#     python = sys.executable
+#     subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
 
 import inquirer
 from progress import Progress
 
-def promtUser():
-    ffmpegParameters = {'_1200K_H265_aac':'-c:v libx265 -b 1200K -c:a aac', 
+
+def prompt_user():
+    ffmpeg_parameters = {'_600K_H265_aac': '-c:v libx265 -b 600K -c:a aac',
+                        '_1000K_H265_aac':'-c:v libx265 -b 1000K -c:a aac',
+                        '_1200K_H265_aac':'-c:v libx265 -b 1200K -c:a aac', 
                         '_2880K_H265_aac':'-c:v libx265 -b 2880K -c:a aac', 
                         '_6000K_H265_aac':'-c:v libx265 -b 6000K -c:a aac', 
                         '*':'',
                         '_ultrafast_1200K_H265_aac':'-c:v libx265 -b 1200K -preset ultrafast -c:a aac', 
-                        '_1280x720_1200K_H265_aac':'-s 1280x720 -c:v libx265 -b 1200K -c:a aac',
-                        '_1920x1080_1200K_H265_aac':'-s 1920x1080 -c:v libx265 -b 1200K -c:a aac',
-                        '_1920x1080_2880K_H265_aac':'-s 1920x1080 -c:v libx265 -b 2880K -c:a aac',
-                        '_1920x1080_6000K_H265_aac':'-s 1920x1080 -c:v libx265 -b 6000K -c:a aac',
-                        '_1080x1920_6000K_H265_aac':'-s 1080x1920 -c:v libx265 -b 6000K -c:a aac',
-                        '_deinterlace_1200K_H265_aac':'-vf yadif -c:v libx265 -b 1200K -c:a aac',
-                        }
+                        '_854x480_500K_H265_aac':'-s 854x480 -c:v libx265 -b 500K -c:a aac',
+                        '_480x854_500K_H265_aac':'-s 480x854 -c:v libx265 -b 500K -c:a aac',
+                        '_480x854_500K_H264_aac':'-s 480x854 -c:v libx264 -b 500K -c:a aac',
+                        '_1280x720_500K_H265_aac':'-s 1280x720 -c:v libx265 -b 500K -c:a aac',
+                         '_1280x720_1000K_H265_aac':'-s 1280x720 -c:v libx265 -b 1000K -c:a aac',
+                         '_1280x720_1200K_H265_aac':'-s 1280x720 -c:v libx265 -b 1200K -c:a aac',
+                         '_1920x1080_1200K_H265_aac':'-s 1920x1080 -c:v libx265 -b 1200K -c:a aac',
+                         '_1920x1080_2880K_H265_aac':'-s 1920x1080 -c:v libx265 -b 2880K -c:a aac',
+                         '_1920x1080_6000K_H265_aac':'-s 1920x1080 -c:v libx265 -b 6000K -c:a aac',
+                         '_1080x1920_6000K_H265_aac':'-s 1080x1920 -c:v libx265 -b 6000K -c:a aac',
+                         '_deinterlace_1200K_H265_aac':'-vf yadif -c:v libx265 -b 1200K -c:a aac',
+                         }
 
     #  Для HD-video 1280×720 < -b 2550K >, для Full-HD 1920×1080 < -b 5760K >
     questions = [
       inquirer.List('parameters',
                     message="What parameters do you need?",
-                    choices=[*ffmpegParameters], 
+                    choices=[*ffmpeg_parameters],
                     carousel=True,
-                ),
+                    ),
     ]
     answers = inquirer.prompt(questions)
 
     # print (answers["parameters"])
-    # print(ffmpegParameters[answers["parameters"]])
-    return answers["parameters"], ffmpegParameters[answers["parameters"]]
+    # print(ffmpeg_parameters[answers["parameters"]])
+    return answers["parameters"], ffmpeg_parameters[answers["parameters"]]
+
 
 def run_command(command):
     """ Run the command, capture output and send it to the
@@ -68,21 +77,22 @@ def run_command(command):
 
 if __name__ == "__main__":
     print("hello!")
-    MessageBox = ctypes.windll.user32.MessageBoxW
+    # MessageBox = ctypes.windll.user32.MessageBoxW
     
-    list = sys.argv[1:]
+    file_list = sys.argv[1:]
 
-    presetName, params = promtUser()
+    presetName, params = prompt_user()
+    input_file = []
 
-    for inputFile in list:
+    for input_file in file_list:
         
-        fileNameWPath, fileExtension = os.path.splitext(inputFile)
-        stinfo = os.stat(inputFile)
+        fileNameWPath, fileExtension = os.path.splitext(input_file)
+        stinfo = os.stat(input_file)
 
         print(fileNameWPath+fileExtension)
-        print(list.index(inputFile)+1, '/', len(list), os.path.split(inputFile)[1])
+        print(file_list.index(input_file) + 1, '/', len(file_list), os.path.split(input_file)[1])
 
-        commandLine = 'ffmpeg.exe -nostdin -i "' + inputFile + '" ' + params + ' "' + fileNameWPath + presetName + '.mp4"'
+        commandLine = 'ffmpeg.exe -nostdin -i "' + input_file + '" ' + params + ' "' + fileNameWPath + presetName + '.mp4"'
         # MessageBox(None, commandLine, 'Window title', 0)
         run_command(commandLine)
         
@@ -92,9 +102,9 @@ if __name__ == "__main__":
     # MessageBox(None, "END", 'Window title', 0)
     # os.system("start C:\Windows\Media\Alarm03.wav")
     os.system("rundll32.exe cmdext.dll,MessageBeepStub")
-    print(os.path.split(inputFile)[0])
+    print(os.path.split(input_file)[0])
     input("Press Enter to continue...")
-    os.system(f'explorer "{os.path.split(inputFile)[0]}"')
+    os.system(f'explorer "{os.path.split(input_file)[0]}"')
     
 
 # ---------------------------
